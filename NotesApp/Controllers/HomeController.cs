@@ -19,27 +19,25 @@ namespace NotesApp.Controllers
         [HttpPost]
         public JsonResult updateNote(Note note)
         {
-            //string[] parts = noteIddetail.Split('&');
-            //Note oldNoteModel =(Note)db.Notes.Find(parts[0]);
-            Note oldNoteModel = (Note)db.Notes.Find(note.NoteId);
-
-            if (oldNoteModel == null)
+            //Note oldNoteModel = (Note)db.Notes.Find(note.NoteId);
+            if (db.Notes.Find(note.NoteId)==null)
             {
                 //Add new
-                //Note note = new Note();
-                note.NoteId = Guid.NewGuid().ToString();
-                note.Date = DateTime.UtcNow;
-                db.Notes.Add(note);
+                Note newNote = new Note();
+                newNote.NoteId = Guid.NewGuid().ToString();
+                newNote.Date = DateTime.UtcNow;
+                newNote.NoteTitle = note.NoteTitle;
+                newNote.NoteDetail = note.NoteDetail;
+                db.Notes.Add(newNote);
                 db.SaveChanges();
-                return Json(note, JsonRequestBehavior.AllowGet);
+                return Json(newNote, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 //Update
-                oldNoteModel.Date = DateTime.UtcNow;
-                oldNoteModel.NoteDetail = note.NoteDetail;
+                db.Entry(note).State = EntityState.Modified;
                 db.SaveChanges();
-                return Json(oldNoteModel, JsonRequestBehavior.AllowGet);
+                return Json(note, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -66,14 +64,20 @@ namespace NotesApp.Controllers
 
             return Json("Successfully deleted.", JsonRequestBehavior.AllowGet);
         }
-        //[HttpPost]
-        //public ActionResult updateNoteById(string noteId, string noteDetail)
-        //{
-        //    Note note = db.Notes.Find(noteId);
-        //    note.NoteDetail = noteDetail;
-        //    db.Entry(note).State = EntityState.Modified;
-        //    db.SaveChanges();
-        //    return Json(note, JsonRequestBehavior.AllowGet);
-        //}
+        [HttpPost]
+        public ActionResult updateNoteById(string NoteId, string NoteTitle, string NoteDetail)
+        {
+            Note note = db.Notes.Find(NoteId);
+            db.Entry(note).State = EntityState.Deleted;
+            db.SaveChanges();
+            Note newNote = new Note();
+            newNote.NoteId = NoteId;
+            newNote.Date = DateTime.UtcNow;
+            newNote.NoteTitle = NoteTitle;
+            newNote.NoteDetail = NoteDetail;
+            db.Notes.Add(newNote);
+            db.SaveChanges();
+            return Json(newNote, JsonRequestBehavior.AllowGet);
+        }
     }
 }
