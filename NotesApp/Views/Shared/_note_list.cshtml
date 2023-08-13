@@ -1,0 +1,15 @@
+﻿@model IEnumerable<NotesApp.Models.Note>
+
+@foreach (var item in Model)
+{
+
+    <a href="#" class="note_item" data-note-id="@item.NoteId">
+        <div class="note_item_text">
+            @Html.DisplayFor(modelItem => item.NoteTitle)
+        </div>
+        <div class="">
+            @item.Date.ToString("dd MMM, yyyy")
+        </div>
+    </a>
+
+}

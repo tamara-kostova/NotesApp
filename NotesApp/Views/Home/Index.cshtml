@@ -1,0 +1,240 @@
+﻿@model NotesApp.Models.Note
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+
+    <div id="main_wrapper">
+        <div id="left_column">
+
+            <table style="width: 100%;">
+                <tr>
+                    <td style="padding: 10px;">
+                        <h3>All Notes</h3>
+                    </td>
+                    <td style="padding: 10px; text-align: right;">
+                        <button id="btn_add_new" class="button btn-sm">Add New</button>
+                    </td>
+                </tr>
+            </table>
+
+            <div id="note_list"></div>
+
+        </div>
+        <div id="right_column">
+
+            <form id="note_form" action="/Home/updateNote" method="post">
+                <input id="txt_hdn_note_id" type="hidden" name="NoteId" data-note-id="" />
+                <div>
+                    <input id="note_title" name="NoteTitle" placeholder="Title" />
+                </div>
+                <textarea id="txt_note" name="NoteDetail" placeholder="Take a note here ...."></textarea>
+            </form>
+
+            <div id="text_area_toolbar">
+                <table style="width: 100%; height: 100%;">
+                    <tr>
+                        <td style="text-align: right; padding-right: 10px;">
+                            <button id="btn_save" class="button">Save</button>
+                            <button id="btn_update" class="button">Update</button>
+                            <button id="btn_delete" class="button">Delete</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            hideUpdateDeleteButtons();
+
+            getNoteList();
+
+            $("#btn_add_new").click(function () {
+
+                resetForm();
+
+            });
+
+            $("#btn_save").click(function () {
+
+                $("#note_form").trigger("submit");
+
+            });
+
+            $("#btn_update").click(function () {
+
+                $("#note_form").trigger("submit");
+
+            });
+
+            $("#note_form").submit(function (e) {
+
+                e.preventDefault();
+
+                var form = document.querySelector("form");
+                var data = new FormData(form);
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function () {
+                        //show loading
+                    },
+                    success: function (data) {
+
+                        //success
+                        resetForm();
+                        getNoteList();
+
+                    }
+                });
+
+            });
+
+            $("#note_list").on("click", "a.note_item", function (e) {
+
+                e.preventDefault();
+                $(this).siblings().removeClass("link_active");
+                $(this).addClass("link_active");
+
+                showNoteDetail($(this).data("note-id"))
+
+            });
+
+            $("#btn_delete").click(function () {
+                const el = document.getElementById("txt_hdn_note_id");
+                deleteNote(el.getAttribute("noteid"));
+            });
+
+        });
+
+        function showUpdateDeleteButtons() {
+            $("#btn_update").show();
+            $("#btn_delete").show();
+        }
+
+        function hideUpdateDeleteButtons() {
+            $("#btn_update").hide();
+            $("#btn_delete").hide();
+        }
+
+        function showSaveButton() {
+            $("#btn_save").show();
+        }
+
+        function hideSaveButton() {
+            $("#btn_save").hide();
+        }
+
+        function resetForm() {
+            //clear form data
+            $("#txt_hdn_note_id").val("");
+            $("#note_title").val("")
+            $("#txt_note").val("");
+
+            //remove selection
+            $("#note_list > a.note_item").siblings().removeClass('link_active');
+
+            showSaveButton();
+            hideUpdateDeleteButtons();
+        }
+
+        function getNoteList() {
+            $("#note_list").empty();
+            $.ajax({
+                type: 'GET',
+                url: '/Home/_note_list',
+                timeout: 60000, //1 minute
+                beforeSend: function () {
+                    $("#note_list").html("<b>Loading ....</b>")
+                },
+                success: function (data) {
+                    $("#note_list").html(data);
+                },
+                error: function (xmlhttprequest, textstatus, message) {
+                    $("#note_list").html("<div style = \"text-align: center;\"><h4>Connection problem. Please try again.</h4><button onclick = \"getNoteList()\">Retry</button></div>");
+
+                }
+            });
+        }
+
+        function showNoteDetail(v) {
+            console.log("Note ID : " + v)
+            $.ajax({
+                type: 'GET',
+                url: '/Home/getNoteDetailById',
+                data: { noteId: v },
+                timeout: 60000, //1 minute
+                beforeSend: function () {
+                    //show loading
+                    console.log("Loading ....")
+                },
+                success: function (data) {
+                    //console.log(data);
+                    bindDetailValue(data);
+                },
+                error: function (xmlhttprequest, textstatus, message) {
+                    console.log(xmlhttprequest, textstatus, message)
+                    console.log("ERROR")
+                }
+            });
+        }
+
+        function bindDetailValue(v) {
+            $("#txt_hdn_note_id").val(v.NoteId);
+            $("#note_title").val(v.NoteTitle);
+            $("#txt_note").val(v.NoteDetail);
+
+            const el = document.getElementById("txt_hdn_note_id");
+
+            el.setAttribute("noteid", v.NoteId);
+
+            if ($("#txt_hdn_note_id").val(v.noteId) != null && $("#txt_hdn_note_id").val(v.noteId) != "") {
+                $("#note_title").text(v.NoteTitle);
+                $("#txt_note").text(v.NoteDetail);
+                $("#txt_hdn_note_id").text(v.NoteId);
+                hideSaveButton();
+                showUpdateDeleteButtons();
+            }
+            else {
+                showSaveButton();
+                hideUpdateDeleteButtons();
+            }
+
+        }
+
+        function deleteNote(v) {
+            $.ajax({
+                type: 'GET',
+                url: '/Home/deleteNoteById',
+                data: { noteId: v },
+                timeout: 60000, //1 minute
+                beforeSend: function () {
+                    //show loading
+                    console.log("Loading ....")
+                },
+                success: function (data) {
+                    console.log(data);
+                    resetForm();
+                    getNoteList();
+                },
+                error: function (xmlhttprequest, textstatus, message) {
+
+                }
+            });
+        }
+
+    </script>
+
+}

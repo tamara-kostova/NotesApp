@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - NoteWebApplication</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/Content/site.css" />
+    </environment>
+</head>
+<body>
+    @RenderBody()
+
+    <environment include="Development">
+        <script src="~/Scripts/jquery-3.4.1.js"></script>
+        <script src="~/Scripts/bootstrap.js"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
