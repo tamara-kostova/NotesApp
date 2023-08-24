@@ -144,3 +144,6 @@ a.note_item {
 .button:hover{
     cursor: pointer;
 }
+#txt_hdn_note_id {
+    visibility: hidden;
+}

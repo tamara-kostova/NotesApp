@@ -25,7 +25,9 @@
         <div id="right_column">
 
             <form id="note_form" action="/Home/updateNote" method="post">
-                <input id="txt_hdn_note_id" name="NoteId" data-note-id="" />
+                <div>
+                    <input id="txt_hdn_note_id" name="NoteId" data-note-id="" class="noteid" disabled/>
+                </div>
                 <div>
                     <input id="note_title" name="NoteTitle" placeholder="Title" />
                 </div>
@@ -74,8 +76,6 @@
                 const el = document.getElementById("txt_hdn_note_id");
                 updateNote(el.getAttribute("noteid"));
 
-                //$("#note_form").trigger("submit");
-
             });
 
             $("#note_form").submit(function (e) {
@@ -109,14 +109,14 @@
                 e.preventDefault();
                 $(this).siblings().removeClass("link_active");
                 $(this).addClass("link_active");
-
+                $("#txt_hdn_note_id").val($(this).data("note-id"))
                 showNoteDetail($(this).data("note-id"))
-
             });
 
             $("#btn_delete").click(function () {
                 const el = document.getElementById("txt_hdn_note_id");
                 deleteNote(el.getAttribute("noteid"));
+                resetForm();
             });
 
         });
@@ -140,12 +140,8 @@
         }
 
         function resetForm() {
-            //clear form data
-            $("#txt_hdn_note_id").val("");
             $("#note_title").val("")
             $("#txt_note").val("");
-
-            //remove selection
             $("#note_list > a.note_item").siblings().removeClass('link_active');
 
             showSaveButton();
@@ -196,17 +192,14 @@
             $("#txt_hdn_note_id").val(v.NoteId);
             $("#note_title").val(v.NoteTitle);
             $("#txt_note").val(v.NoteDetail);
-
             const el = document.getElementById("txt_hdn_note_id");
 
             el.setAttribute("noteid", v.NoteId);
-
+            hideSaveButton();
+            showUpdateDeleteButtons();
             if ($("#txt_hdn_note_id").val(v.noteId) != null && $("#txt_hdn_note_id").val(v.noteId) != "") {
                 $("#note_title").text(v.NoteTitle);
                 $("#txt_note").text(v.NoteDetail);
-                $("#txt_hdn_note_id").text(v.NoteId);
-                hideSaveButton();
-                showUpdateDeleteButtons();
             }
             else {
                 showSaveButton();
@@ -237,16 +230,15 @@
         }
 
         function updateNote(v) {
-            title=($("#note_title").text())
-            detail=($("#txt_note").text())
-            console.log(v)
+            title=($("#note_title"))
+            detail = ($("#txt_note"))
             $.ajax({
                 type: 'POST',
-                url: '/Home/updateNoteById',
+                url: '/Home/updateNote',
                 data: {
                     NoteId: v,
-                    NoteTitle: $("#note_title").text(),
-                    NoteDetail: $("#txt_note").text()
+                    NoteTitle: title.val(),
+                    NoteDetail: detail.val()
                 },
                 timeout: 60000, //1 minute
                 beforeSend: function () {

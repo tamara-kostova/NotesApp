@@ -35,7 +35,11 @@ namespace NotesApp.Controllers
             else
             {
                 //Update
-                db.Entry(note).State = EntityState.Modified;
+                var result = db.Notes.Find(note.NoteId);
+                result.NoteTitle = note.NoteTitle;
+                result.Date = DateTime.Now;
+                result.NoteDetail = note.NoteDetail;
+                db.Entry(result).State = EntityState.Modified;
                 db.SaveChanges();
                 return Json(note, JsonRequestBehavior.AllowGet);
             }
@@ -67,17 +71,12 @@ namespace NotesApp.Controllers
         [HttpPost]
         public ActionResult updateNoteById(string NoteId, string NoteTitle, string NoteDetail)
         {
-            Note note = db.Notes.Find(NoteId);
-            db.Entry(note).State = EntityState.Deleted;
+            var note = db.Notes.Find(NoteId);
+            note.Date = DateTime.UtcNow;
+            note.NoteTitle = NoteTitle;
+            note.NoteDetail = NoteDetail;
             db.SaveChanges();
-            Note newNote = new Note();
-            newNote.NoteId = NoteId;
-            newNote.Date = DateTime.UtcNow;
-            newNote.NoteTitle = NoteTitle;
-            newNote.NoteDetail = NoteDetail;
-            db.Notes.Add(newNote);
-            db.SaveChanges();
-            return Json(newNote, JsonRequestBehavior.AllowGet);
+            return Json(note, JsonRequestBehavior.AllowGet);
         }
     }
 }
