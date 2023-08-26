@@ -6,6 +6,7 @@
 <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
 
     <div id="main_wrapper">
+
         <div id="left_column">
 
             <table style="width: 100%;">
@@ -18,21 +19,20 @@
                     </td>
                 </tr>
             </table>
-
             <div id="note_list"></div>
-
         </div>
         <div id="right_column">
 
             <form id="note_form" action="/Home/updateNote" method="post">
                 <div>
-                    <input id="txt_hdn_note_id" name="NoteId" data-note-id="" class="noteid" disabled/>
+                    <input id="txt_hdn_note_id" name="NoteId" data-note-id="" class="noteid" disabled />
                 </div>
                 <div>
                     <input id="note_title" name="NoteTitle" placeholder="Title" />
                 </div>
                 <textarea id="txt_note" name="NoteDetail" placeholder="Take a note here ...."></textarea>
             </form>
+
 
             <div id="text_area_toolbar">
                 <table style="width: 100%; height: 100%;">
@@ -45,8 +45,8 @@
                     </tr>
                 </table>
             </div>
-
         </div>
+
     </div>
 </div>
 
@@ -114,9 +114,31 @@
             });
 
             $("#btn_delete").click(function () {
-                const el = document.getElementById("txt_hdn_note_id");
-                deleteNote(el.getAttribute("noteid"));
-                resetForm();
+                bootbox.confirm({
+                    title: "Delete note",
+                    message: "Are you sure?",
+                    buttons: {
+                        cancel: {
+                            label: "Cancel ",
+                            className: "btn-default pull-left"
+                        },
+                        confirm: {
+                            label: "Delete ",
+                            className: "btn-danger pull-right"
+                        }
+                    },
+                    className: 'dialog',
+                    size: 'big',
+                    callback: function (result) {
+                        if (result) {
+                            const el = document.getElementById("txt_hdn_note_id");
+                            deleteNote(el.getAttribute("noteid"));
+                            resetForm();
+                        } else {
+                            alert("confirm cancel");
+                        }
+                    }
+                });
             });
 
         });
@@ -143,7 +165,6 @@
             $("#note_title").val("")
             $("#txt_note").val("");
             $("#note_list > a.note_item").siblings().removeClass('link_active');
-
             showSaveButton();
             hideUpdateDeleteButtons();
         }
