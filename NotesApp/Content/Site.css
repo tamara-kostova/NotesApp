@@ -17,23 +17,9 @@ body {
 .wrapper {
     display: grid;
     grid-gap: 50px;
+    grid-template-columns: auto auto auto auto;
     background-color: #fff;
     color: #444;
-    grid-template-rows: repeat(3, 100px);
-    grid-template-rows: 100px 100px 100px;
-    grid-auto-flow: column
-}
-
-.card {
-    background-color: #e9c46a;
-    color: #fff;
-    border-radius: 5px;
-    padding: 20px;
-    font-size: 150%;
-    display: block;
-    height: 300px;
-    outline: solid red;
-    margin: 30px;
 }
 
 #main_wrapper {
@@ -200,6 +186,7 @@ a.note_item {
     height: 30px;
     padding: 5px;
 }
+
 #btn_bold{
     font-weight: 900;
 }
@@ -212,14 +199,28 @@ a.note_item {
     text-decoration: underline;
 }
 
-.clicked{
-    background-color: darkslategrey;
-}
-
 #btn_bold:hover, #btn_italic:hover, #btn_underline:hover {
     background-color: azure;
 }
 
 a{
     text-decoration: none;
+    color: black;
+}
+
+.card {
+    width: 70%;
+    background-color: darkorange;
+    height: 200px;
+    margin: 20px;
+    padding: 20px;
+    
+}
+
+.card_title{
+    border-bottom: solid grey; 
+}
+
+.clicked {
+    background-color: darkslategrey;
 }

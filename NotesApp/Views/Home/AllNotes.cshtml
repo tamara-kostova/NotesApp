@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<NotesApp.Models.Note>
 <table style="width: 100%;">
     <tr>
-        <td style="padding: 20px; text-align: center; width: 300px;">
-            <button id="home" class="button" width: 300px;><h1>All Notes</h1></button>
+        <td style="padding: 20px; text-align: center; width: 400px;">
+            <h1 width: 300px;>All Notes</h1>
         </td>
         <td style="padding: 20px; text-align: right;">
             <a href="Index" id="btn_add_new" class="button">Add New</a>
@@ -12,16 +12,22 @@
 <div class="wrapper">
     @foreach (var item in Model)
     {
-        <div class="card">
-                <div class="card_title">
-                    @Html.DisplayFor(modelItem => item.NoteTitle)
-                </div>
-                <div class="card_details">
-                    @Html.DisplayFor(modelItem => item.NoteDetail)
-                </div>
-                <div class="">
-                    @item.Date.ToString("dd MMM, yyyy")
-                </div>
-        </div>
+        <a class="card" href="~/Home/Index" class="note_item" data-note-id="@item.NoteId">
+            <h3 class="card_title" style="text-align:center; font-weight: bold">
+                @Html.DisplayFor(modelItem => item.NoteTitle)
+            </h3>
+            <div class="card_details">
+                @Html.DisplayFor(modelItem => item.NoteDetail)
+            </div>
+            <div class="card_date">
+                @item.Date.ToString("dd MMM, yyyy")
+            </div>
+        </a>
     }
 </div>
+
+<script>
+    $(".card").click(function () {
+
+    })
+</script>

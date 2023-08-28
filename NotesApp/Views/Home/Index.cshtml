@@ -12,7 +12,7 @@
             <table style="width: 100%;">
                 <tr>
                     <td style="padding: 10px;">
-                        <a href="AllNotes" id="home" class="button"><h3>All Notes</h3>
+                        <a href="~/Home/AllNotes" id="home" class="button"><h3>All Notes</h3>
                     </td>
                     <td style="padding: 10px; text-align: right;">
                         <button id="btn_add_new" class="button">Add New</button>
@@ -272,7 +272,7 @@
             element = document.getElementById('txt_note');
             if (element.style.fontWeight == '900') {
                 element.style.fontWeight = "100"
-                    $(this).removeClass("clicked");
+                $(this).removeClass("clicked");
             }
             else {
                 element.style.fontWeight = "900"
