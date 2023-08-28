@@ -53,6 +53,13 @@ namespace NotesApp.Controllers
         }
 
         [HttpGet]
+        public ActionResult AllNotes()
+        {
+            var result = db.Notes.OrderByDescending(n => n.Date).AsQueryable();
+            return View(result);
+        }
+
+        [HttpGet]
         public JsonResult getNoteDetailById(string noteId)
         {
             var note = db.Notes.Find(noteId);

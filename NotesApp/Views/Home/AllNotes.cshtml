@@ -1,0 +1,27 @@
+﻿@model IEnumerable<NotesApp.Models.Note>
+<table style="width: 100%;">
+    <tr>
+        <td style="padding: 20px; text-align: center; width: 300px;">
+            <button id="home" class="button" width: 300px;><h1>All Notes</h1></button>
+        </td>
+        <td style="padding: 20px; text-align: right;">
+            <a href="Index" id="btn_add_new" class="button">Add New</a>
+        </td>
+    </tr>
+</table>
+<div class="wrapper">
+    @foreach (var item in Model)
+    {
+        <div class="card">
+                <div class="card_title">
+                    @Html.DisplayFor(modelItem => item.NoteTitle)
+                </div>
+                <div class="card_details">
+                    @Html.DisplayFor(modelItem => item.NoteDetail)
+                </div>
+                <div class="">
+                    @item.Date.ToString("dd MMM, yyyy")
+                </div>
+        </div>
+    }
+</div>
