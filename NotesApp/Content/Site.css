@@ -224,3 +224,7 @@ a{
 .clicked {
     background-color: darkslategrey;
 }
+
+#home:hover{
+    background-color: azure;
+}
