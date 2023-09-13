@@ -12,7 +12,7 @@
 <div class="wrapper">
     @foreach (var item in Model)
     {
-        <a class="card"  href="~/Home/Index" class="note_item" data-note-id="@item.NoteId">
+        <a class="note_item card col-sm-5"  href="~/Home/Index" class="" data-note-id="@item.NoteId">
             <h3 class="card_title" style="text-align:center; font-weight: bold">
                 @Html.DisplayFor(modelItem => item.NoteTitle)
             </h3>

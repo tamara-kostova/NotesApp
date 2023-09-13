@@ -121,15 +121,15 @@
                     buttons: {
                         cancel: {
                             label: "Cancel ",
-                            className: "btn-default pull-left"
+                            className: "btn-default pull-left btn-cancel"
                         },
                         confirm: {
                             label: "Delete ",
-                            className: "btn-danger pull-right"
+                            className: "btn-danger pull-right btn-confirm"
                         }
                     },
                     className: 'dialog',
-                    size: 'big',
+                    size: 'medium',
                     callback: function (result) {
                         if (result) {
                             const el = document.getElementById("txt_hdn_note_id");
